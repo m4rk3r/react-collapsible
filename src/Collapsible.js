@@ -52,9 +52,9 @@ class Collapsible extends Component {
 
     // If there has been a change in the open prop (controlled by accordion)
     if (prevProps.open !== this.props.open) {
-      if(this.props.open === true) {
+      if(this.props.open === true && this.state.isClosed) {
         this.openCollapsible();
-      } else {
+      } else if(this.props.open === false && !this.state.isClosed) {
         this.closeCollapsible();
       }
     }
@@ -63,7 +63,7 @@ class Collapsible extends Component {
   closeCollapsible() {
     this.setState({
       shouldSwitchAutoOnNextCycle: true,
-      height: this.refs.inner.offsetHeight,
+      height: this.inner.offsetHeight,
       transition: `height ${this.props.transitionTime}ms ${this.props.easing}`,
       inTransition: true,
     });
@@ -78,7 +78,7 @@ class Collapsible extends Component {
 
   continueOpenCollapsible() {
     this.setState({
-      height: this.refs.inner.offsetHeight,
+      height: this.inner.offsetHeight,
       transition: `height ${this.props.transitionTime}ms ${this.props.easing}`,
       isClosed: false,
       hasBeenOpened: true,
@@ -119,14 +119,17 @@ class Collapsible extends Component {
     return null;
   }
 
-  handleTransitionEnd() {
-    // Switch to height auto to make the container responsive
-    if (!this.state.isClosed) {
-      this.setState({ height: 'auto', overflow: this.props.overflowWhenOpen, inTransition: false });
-      this.props.onOpen();
-    } else {
-      this.setState({ inTransition: false });
-      this.props.onClose();
+  handleTransitionEnd(evt) {
+    // only react to transitions originating from collapsible container component
+    if (evt.target === this.outer) {
+      // Switch to height auto to make the container responsive
+      if (!this.state.isClosed) {
+        this.setState({ height: 'auto', overflow: this.props.overflowWhenOpen, inTransition: false });
+        this.props.onOpen();
+      } else {
+        this.setState({ inTransition: false });
+        this.props.onClose();
+      }
     }
   }
 
@@ -175,13 +178,13 @@ class Collapsible extends Component {
 
         <div
           className={outerClassString.trim()}
-          ref="outer"
+          ref={(obj) => { this.outer = obj; }}
           style={dropdownStyle}
           onTransitionEnd={this.handleTransitionEnd}
         >
           <div
             className={innerClassString.trim()}
-            ref="inner"
+            ref={(obj) => { this.inner = obj; }}
           >
             {children}
           </div>
