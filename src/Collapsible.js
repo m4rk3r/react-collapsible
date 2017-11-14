@@ -62,10 +62,9 @@ class Collapsible extends Component {
 
     // If there has been a change in the open prop (controlled by accordion)
     if (prevProps.open !== this.props.open) {
-      if (this.props.open === true) {
+      if(this.props.open === true && this.state.isClosed) {
         this.openCollapsible();
-        this.props.onOpening();
-      } else {
+      } else if(this.props.open === false && !this.state.isClosed) {
         this.closeCollapsible();
         this.props.onClosing();
       }
