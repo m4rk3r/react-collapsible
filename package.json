@@ -37,7 +37,7 @@
   },
   "scripts": {
     "build": "babel src/Collapsible.js > dist/Collapsible.js",
-    "prepare": "npm install && npm run build"
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "prop-types": "^15.5.8",
