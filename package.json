@@ -9,6 +9,9 @@
     "collapsible",
     "accordion"
   ],
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "types": "./index.d.ts",
   "author": "Glenn Flanagan <glenn@arctictiger.co.uk>",
